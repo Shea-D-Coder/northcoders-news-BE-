@@ -1,6 +1,5 @@
-const {
-  convertTimestampToDate
-} = require("../db/seeds/utils");
+const { convertTimestampToDate} = require("../db/seeds/utils");
+const { createLookupObject } = require("../db/seeds/utils");
 
 
 
@@ -39,4 +38,57 @@ describe("convertTimestampToDate", () => {
     expect(result).toEqual(expected);
   });
 });
+describe("createLookupObject", () => {
+  test(" returns an empty object when passed an empty array", () => {
+    const key = 'title'
+    const value = 'article_id'
+    expect(createLookupObject([], key, value)).toEqual({})
+  })
+  test(" returns an object with the correct key and value referenced when passed an array with one object", () => {
+    const input = [{  article_id: 1, title: 'zombies'}]
+
+    const key = 'title'
+     const value = 'article_id'
+
+    const expected = { zombies: 1}
+    const actual = createLookupObject(input, key, value)
+    expect(actual).toEqual(expected)
+  })
+  test(" returns an object with the correct keys and values referenced when passed an array with multiple object", () => {
+     const input = [
+                   { article_id: 1, title: "You Only Look Once"},
+                   { article_id: 2, title: "Zombie Apocalypse" },
+                   { article_id: 3, title: "Fantastic Yeast"},
+                   { article_id: 4, title: "The case of the disappearing toe"}
+                  ]
+     const key = 'title'
+     const value = 'article_id'
+    const expected = {
+                      "You Only Look Once": 1,
+                      "Zombie Apocalypse": 2,
+                      "Fantastic Yeast":3,
+                      "The case of the disappearing toe": 4
+                      }
+    const actual = createLookupObject(input, key, value)
+    expect(actual).toEqual(expected)          
+  })
+  test(" the original array has not been mutated ", () => {
+    const input = [
+                   { article_id: 1, title: "You Only Look Once"},
+                   { article_id: 2, title: "Zombie Apocalypse" },
+                   { article_id: 3, title: "Fantastic Yeast"},
+                   { article_id: 4, title: "The case of the disappearing toe"}
+                  ]
+   
+    const copyInput = [
+                   { article_id: 1, title: "You Only Look Once"},
+                   { article_id: 2, title: "Zombie Apocalypse" },
+                   { article_id: 3, title: "Fantastic Yeast"},
+                   { article_id: 4, title: "The case of the disappearing toe"}
+                  ]
+                  
+    const actual = createLookupObject(input)
+    expect(actual).toEqual(copyInput) 
+  })
+})
 

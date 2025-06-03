@@ -2,6 +2,7 @@ const db = require("../connection")
 const format = require ('pg-format');
 const data = require("../data/test-data/articles");
 const { convertTimestampToDate } = require('./utils.js');
+const { createLookupObject} = require('./utils.js');
 
 //console.log(data)
 
@@ -34,29 +35,37 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         return [slug, description, img_url]
       })
       const sqlTopicString = format(`INSERT INTO topics(slug, description, img_url) VALUES %L`, formattedTopicValues)
-       return db.query(sqlTopicString)   
+       return db.query(sqlTopicString)  
+
     }).then(() => {
       const formattedUserValues = userData.map(({username, name, avatar_url}) => {
         return [username, name, avatar_url]
       })
       const sqlUserString = format(`INSERT INTO users(username, name, avatar_url) VALUES %L`, formattedUserValues)
        return db.query(sqlUserString)   
+
     }).then(() => {
       const formatedTimeStamp = articleData.map(convertTimestampToDate)
       const formattedArticleValues = formatedTimeStamp.map(({title, topic, author, body, created_at, votes, article_img_url}) => {
       return [title, topic, author, body, created_at, votes, article_img_url]
       })
-      const sqlArticleString = format(`INSERT INTO articles(title, topic, author, body, created_at, votes, article_img_url) VALUES %L`, formattedArticleValues)
+      const sqlArticleString = format(`INSERT INTO articles(title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *`, formattedArticleValues) 
       return db.query(sqlArticleString)   
-    }).then(() => {
+
+    }).then(({rows}) => {
+      const key = 'title'
+      const value = 'article_id'
+      const lookupObject = createLookupObject(rows, key, value)
       const formatedTimeStamp = commentData.map(convertTimestampToDate)
-      const formattedCommentValues = formatedTimeStamp.map(({article_id, body, votes, author, created_at}) => {
-      return [article_id, body, votes, author, created_at]
+      const formattedCommentValues = formatedTimeStamp.map(({article_title, body, votes, author, created_at}) => {
+      return [lookupObject[article_title], body, votes, author, created_at]
+      
       })
       const sqlCommentString = format(`INSERT INTO comments(article_id, body, votes, author, created_at) VALUES %L`, formattedCommentValues)
+      console.log(sqlCommentString)
       return db.query(sqlCommentString)
     }) 
     
 };
 
-module.exports = {seed, convertTimestampToDate};
+module.exports = seed;
