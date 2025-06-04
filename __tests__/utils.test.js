@@ -73,22 +73,20 @@ describe("createLookupObject", () => {
     expect(actual).toEqual(expected)          
   })
   test(" the original array has not been mutated ", () => {
-    const input = [
+  const input = [
                    { article_id: 1, title: "You Only Look Once"},
                    { article_id: 2, title: "Zombie Apocalypse" },
                    { article_id: 3, title: "Fantastic Yeast"},
                    { article_id: 4, title: "The case of the disappearing toe"}
                   ]
    
-    const copyInput = [
-                   { article_id: 1, title: "You Only Look Once"},
-                   { article_id: 2, title: "Zombie Apocalypse" },
-                   { article_id: 3, title: "Fantastic Yeast"},
-                   { article_id: 4, title: "The case of the disappearing toe"}
-                  ]
+    const inputCopy = [];
+    for (const obj of input){
+      inputCopy.push({...obj})
+    }
                   
-    const actual = createLookupObject(input)
-    expect(actual).toEqual(copyInput) 
+    createLookupObject(input)
+    expect(input).toEqual(inputCopy) 
   })
 })
 
