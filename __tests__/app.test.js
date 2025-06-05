@@ -26,3 +26,21 @@ describe("GET /api", () => {
       });
   });
 })
+  describe("GET /api/topics", () => {
+   test("200: Responds with an object with the key of topics and the value of an array of topic objects", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then(({ body }) => {
+        const [{ 
+          slug,
+          description,
+          img_url
+        }] = body.topics;
+        expect(typeof slug).toBe('string');
+        expect(typeof description).toBe('string');
+        expect(typeof img_url).toBe('string');
+        console.log(body)
+      });
+  });
+})
