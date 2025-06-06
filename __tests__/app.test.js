@@ -40,7 +40,46 @@ describe("GET /api", () => {
         expect(typeof slug).toBe('string');
         expect(typeof description).toBe('string');
         expect(typeof img_url).toBe('string');
-        console.log(body)
       });
   });
 })
+  describe("GET /api/articles", () => {
+   test("200: Responds with an object with the key of articles and the value of an array of article objects", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const [{ 
+          author,
+          title,
+          article_id,
+          topic,
+          created_at,
+          votes,
+          article_img_url,
+          comment_count
+        }] = body.articles;
+        expect(typeof author).toBe('string');
+        expect(typeof title).toBe('string');
+        expect(typeof article_id).toBe('number');
+        expect(typeof topic).toBe('string');
+        expect(typeof created_at).toBe('string');
+        expect(typeof votes).toBe('number');
+        expect(typeof article_img_url).toBe('string');
+        expect(typeof comment_count).toBe('number');
+        console.log(body)
+      });
+  });
+  test("200: Responds with an object with the article body not included", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const { articles } = body
+        articles.forEach((article) => {
+        expect(article).not.toHaveProperty("body");   
+      })
+    });
+  });
+})
+
