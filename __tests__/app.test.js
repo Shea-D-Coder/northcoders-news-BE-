@@ -67,7 +67,6 @@ describe("GET /api", () => {
         expect(typeof votes).toBe('number');
         expect(typeof article_img_url).toBe('string');
         expect(typeof comment_count).toBe('number');
-        console.log(body)
       });
   });
   test("200: Responds with an object with the article body not included", () => {
@@ -80,6 +79,21 @@ describe("GET /api", () => {
         expect(article).not.toHaveProperty("body");   
       })
     });
+  });
+  test("200: Responds with an object with the articles sorted by date in desending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+
+        const articleDates = articles.map(article => article.created_at);
+
+        const sortedArticlesByDates =[ ...articleDates].sort((latestArticle, earlierArticle) => {  
+          return new Date(earlierArticle) - new Date(latestArticle );
+        })
+        expect(articleDates).toEqual(sortedArticlesByDates); 
+      });
   });
 })
 

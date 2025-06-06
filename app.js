@@ -28,9 +28,9 @@ app.get('/api/articles', (request, response) =>{
      COUNT(comments.comment_id)::INT AS comment_count 
      FROM articles 
      LEFT JOIN comments ON comments.article_id = articles.article_id
-     GROUP BY articles.article_id`).then(({rows}) => {
+     GROUP BY articles.article_id
+     ORDER BY articles.created_at DESC`).then(({rows}) => {
     response.status(200).send({articles: rows})
-    console.log(rows)
     })
 })
 
