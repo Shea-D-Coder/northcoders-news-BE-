@@ -147,6 +147,14 @@ describe("GET /api/articles/:article_id", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+    test(" GET - 404: Responds with an error with a valid article_id that does not exist", () => {
+    return request(app)
+      .get("/api/articles/99999999")
+      .expect(404)
+      .then(({ body}) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
 })
 
   
