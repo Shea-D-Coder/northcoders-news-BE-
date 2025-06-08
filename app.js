@@ -1,38 +1,21 @@
 const express = require('express')
 const app = express()
-const db = require('./db/connection.js')
 const endpointsJson = require("./endpoints.json");
+const { getApi } = require('./controllers/api.endpoints.controllers.js')
+const { 
+    getAllTopics, 
+    getAllArticles, 
+    getAllUsers
+} = require('./controllers/topics.controllers.js');
 
 
-app.get('/api', (request, response) =>{
-    response.status(200).send({endpoints: endpointsJson})  
-    })
+app.get('/api', getApi)
 
-app.get('/api/topics', (request, response) =>{
-    return db.query(`SELECT * FROM topics`).then(({rows}) => {
-        response.status(200).send({topics: rows})
-        
-    })
-})
+app.get('/api/topics', getAllTopics)
 
-app.get('/api/articles', (request, response) =>{
-    return db.query(`SELECT 
-      articles.author,
-      articles.title,
-      articles.article_id,
-      articles.topic,
-      articles.created_at,
-      articles.votes,
-      articles.article_img_url, 
-        
-     COUNT(comments.comment_id)::INT AS comment_count 
-     FROM articles 
-     LEFT JOIN comments ON comments.article_id = articles.article_id
-     GROUP BY articles.article_id
-     ORDER BY articles.created_at DESC`).then(({rows}) => {
-    response.status(200).send({articles: rows})
-    })
-})
+app.get('/api/articles', getAllArticles)
+
+app.get("/api/users", getAllUsers)
 
 
 module.exports = app

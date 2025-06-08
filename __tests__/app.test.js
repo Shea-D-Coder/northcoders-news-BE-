@@ -4,9 +4,7 @@ const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data/index.js');
 const db = require('../db/connection.js');
 const app = require('../app.js')
-/* Set up your test imports here */
 
-/* Set up your beforeEach & afterAll functions here */
 
 beforeEach(() => { 
    return seed(data)
@@ -96,4 +94,21 @@ describe("GET /api", () => {
       });
   });
 })
+  describe("GET /api/users", () => {
+   test("200: Responds with an object with the key of users and the value of an array of user objects", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const [{ 
+          username,
+          name,
+          avatar_url
+        }] = body.users;
+        expect(typeof username).toBe('string');
+        expect(typeof name).toBe('string');
+        expect(typeof avatar_url).toBe('string');
+      });
+    })
+  })
 

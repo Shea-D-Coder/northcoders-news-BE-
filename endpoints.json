@@ -23,5 +23,12 @@
         }
       ]
     }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [{ "username": "poopy", "name": "Peter", "avatar_url": "" }]
+    }
   }
 }
