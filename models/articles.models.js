@@ -15,8 +15,16 @@ const fetchAllArticles = () => {
       LEFT JOIN comments ON comments.article_id = articles.article_id
       GROUP BY articles.article_id
       ORDER BY articles.created_at DESC`).then(({rows}) => {
-        return rows
+        return rows;
     })
 }
 
-module.exports = { fetchAllArticles }
+const fetchArticlesById = (id) => {
+     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id] )
+     .then(({rows}) => { 
+        const article = rows[0]; 
+        return article;
+    })
+}
+
+module.exports = { fetchAllArticles, fetchArticlesById }

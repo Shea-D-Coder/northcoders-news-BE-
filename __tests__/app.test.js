@@ -111,3 +111,34 @@ describe("GET /api", () => {
       });
     })
   })
+describe("GET /api/articles/:article_id", () => {
+   test("200: Responds with an object of the correct article, with the key of article and the value of that specific article object", () => {
+    return request(app)
+      .get("/api/articles/5")
+      .expect(200)
+      .then(({ body : bodyResponse }) => {
+        const { 
+          author,
+          title,
+          article_id,
+          body,
+          topic,
+          created_at,
+          votes,
+          article_img_url
+        } = bodyResponse.article
+        expect(article_id).toBe(5);
+         expect(typeof author).toBe('string');
+        expect(typeof title).toBe('string');
+        expect(typeof article_id).toBe('number');
+        expect(typeof body).toBe('string')
+        expect(typeof topic).toBe('string');
+        expect(typeof created_at).toBe('string');
+        expect(typeof votes).toBe('number');
+        expect(typeof article_img_url).toBe('string');
+        console.log(author)
+      });
+    })
+  })
+
+  
