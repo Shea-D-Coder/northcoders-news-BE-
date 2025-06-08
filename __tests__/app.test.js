@@ -137,8 +137,16 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof votes).toBe('number');
         expect(typeof article_img_url).toBe('string');
         console.log(author)
-      });
-    })
+    });
   })
+    test(" GET - 400: Responds with an error if id is not valid", () => {
+    return request(app)
+      .get("/api/articles/five")
+      .expect(400)
+      .then(({ body}) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
+})
 
   
