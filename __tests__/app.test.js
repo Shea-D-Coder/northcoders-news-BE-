@@ -156,5 +156,27 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 })
-
+describe("GET /api/articles/:article_id/comments", () => {
+   test("200: Responds with an object with the key of comments and an array of comments for a specific article_id", () => {
+    return request(app)
+      .get("/api/articles/5/comments")
+      .expect(200)
+      .then(({ body : bodyResponse }) => {
+        const [{ 
+          comment_id,
+          votes,
+          created_at,
+          author,
+          body,
+          article_id
+        }] = bodyResponse.comments
+        expect(typeof comment_id).toBe('number');
+        expect(typeof votes).toBe('number');
+        expect(typeof created_at).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string')
+        expect(article_id).toBe(5);
+    });
+  })
+})
   

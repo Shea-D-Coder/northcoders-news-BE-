@@ -7,9 +7,12 @@ const { getAllArticles,
         getArticlesById
       } = require('./controllers/articles.controllers.js');
 const { getAllUsers } = require('./controllers/users.controllers.js');
+const { getCommentsByArticleId
+} = require("./controllers/comments.controllers.js");
 const {handlePostgresErrors,
        handleCustomErrors
       } = require('./errors.js');
+
 
 app.get("/api", getApi)
 
@@ -21,8 +24,12 @@ app.get("/api/users", getAllUsers)
 
 app.get("/api/articles/:article_id", getArticlesById)
 
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
+
 app.use(handlePostgresErrors);
 
 app.use(handleCustomErrors);
+
+
 
 module.exports = app

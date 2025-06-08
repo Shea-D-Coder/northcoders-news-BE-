@@ -30,6 +30,22 @@
     "exampleResponse": {
       "users": [{ "username": "poopy", "name": "Peter", "avatar_url": "" }]
     }
-  }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves a single article by it's article_id",
+    "exampleResponse": {
+      "article":
+      {
+          "author": "Paul_Dane",
+          "title": "Monstera Deliciosa",
+          "article_id": 2,
+          "body": "Rare plant of Central America" , 
+          "topic": "plant",
+          "created_at": "2016-30-30T25:32:13.000Z",
+          "votes": 9,
+          "article_img_url": ""
+      }
+    }
+ }
 }
 
