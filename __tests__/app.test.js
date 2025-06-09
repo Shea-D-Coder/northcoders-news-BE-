@@ -157,7 +157,14 @@ describe("GET /api/articles/:article_id", () => {
   });
 })
 describe("GET /api/articles/:article_id/comments", () => {
-
+  test(" GET - 200: Responds with an empty array when passed and article/article_id that has no comments", () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({ body}) => {
+      expect(body.comments).toEqual([]);
+    });
+  });
    test("200: Responds with an object with the key of comments and an array of comments for a specific article_id", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -202,5 +209,14 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
+     test(" GET - 404: Responds with an error with a valid article_id that does not exist", () => {
+    return request(app)
+      .get("/api/articles/99999999/comments")
+      .expect(404)
+      .then(({ body}) => {
+        expect(body.msg).toBe("Not Found");
+      });
+  });
 })
+
   

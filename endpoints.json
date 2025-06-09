@@ -46,6 +46,23 @@
           "article_img_url": ""
       }
     }
- }
+ },
+"GET /api/articles/:article_id/comments": {
+    "description": "serves all comments for a specific article_id",
+    "exampleResponse": {
+      "comments":[
+      {
+          "comment_id":5,
+          "votes": 30,
+          "created_at": "2016-30-30T25:32:13.333Z",
+          "author": "Mcone_lee",
+          "body": "I love rare plants from Central America", 
+          "article_id": 6
+        }
+      ]
+    }
+  }
 }
+ 
+
 
