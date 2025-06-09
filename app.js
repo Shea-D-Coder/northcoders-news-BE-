@@ -1,18 +1,22 @@
 const express = require('express')
 const app = express()
-const endpointsJson = require("./endpoints.json");
 const { getApi } = require('./controllers/api.endpoints.controllers.js')
 const { getAllTopics } = require('./controllers/topics.controllers.js');
 const { getAllArticles, 
         getArticlesById
       } = require('./controllers/articles.controllers.js');
+
 const { getAllUsers } = require('./controllers/users.controllers.js');
-const { getCommentsByArticleId
-} = require("./controllers/comments.controllers.js");
+
+const { getCommentsByArticleId, 
+        postCommentsByArticleId
+      } = require("./controllers/comments.controllers.js");
+
 const {handlePostgresErrors,
        handleCustomErrors
       } = require('./errors.js');
 
+app.use(express.json())
 
 app.get("/api", getApi)
 
@@ -25,6 +29,10 @@ app.get("/api/users", getAllUsers)
 app.get("/api/articles/:article_id", getArticlesById)
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
+
+app.post("/api/articles/:article_id/comments", postCommentsByArticleId)  
+      
+
 
 app.use(handlePostgresErrors);
 

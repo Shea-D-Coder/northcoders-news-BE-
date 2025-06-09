@@ -136,7 +136,7 @@ describe("GET /api/articles/:article_id", () => {
         expect(typeof created_at).toBe('string');
         expect(typeof votes).toBe('number');
         expect(typeof article_img_url).toBe('string');
-        console.log(author)
+       
     });
   })
     test(" GET - 400: Responds with an error if id is not valid", () => {
@@ -218,5 +218,33 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 })
+  describe("POST /api/articles/:article_id/comments", () => {
+   test("POST - 201: Post a new comment for a specific article and responds with a newly posted comment ", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({
+        username: "butter_bridge",
+        body: "Being consistent is a challenge"
+      })
+      .expect(201)
+      .then(({ body : bodyResponse }) => {
+        const { 
+          comment_id,
+          votes,
+          created_at,
+          author,
+          body,
+          article_id
+        } = bodyResponse.comment
+         expect(typeof comment_id).toBe('number');
+        expect(typeof votes).toBe('number');
+        expect(typeof created_at).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string')
+        expect(article_id).toBe(1);
+      });
+  });
+})
+
 
   
