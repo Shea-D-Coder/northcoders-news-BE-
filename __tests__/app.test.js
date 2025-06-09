@@ -244,6 +244,15 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(article_id).toBe(1);
       });
   });
+    test(" POST - 400: Responds with an error when the request body is missing required fields username and body", () => {
+    return request(app)
+      .post("/api/articles/one/comments")
+      .send({})
+      .expect(400)
+      .then(({ body}) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+  });
 })
 
 
