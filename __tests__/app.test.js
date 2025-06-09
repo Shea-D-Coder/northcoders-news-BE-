@@ -159,7 +159,7 @@ describe("GET /api/articles/:article_id", () => {
 describe("GET /api/articles/:article_id/comments", () => {
    test("200: Responds with an object with the key of comments and an array of comments for a specific article_id", () => {
     return request(app)
-      .get("/api/articles/5/comments")
+      .get("/api/articles/1/comments")
       .expect(200)
       .then(({ body : bodyResponse }) => {
         const [{ 
@@ -175,8 +175,23 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(typeof created_at).toBe('string');
         expect(typeof author).toBe('string');
         expect(typeof body).toBe('string')
-        expect(article_id).toBe(5);
+        expect(article_id).toBe(1);
     });
   })
+   test("200: Responds with an object with the comments sorted by date in desending order", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const comments = body.comments;
+
+        const commentDates = comments.map(comment => comment.created_at);
+
+        const sortedCommentsByDates =[ ...commentDates].sort((latestComment, earlierComment) => {  
+          return new Date(earlierComment) - new Date(latestComment );
+        })
+        expect(commentDates).toEqual(sortedCommentsByDates); 
+      });
+  });
 })
   

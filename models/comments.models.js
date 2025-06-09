@@ -1,4 +1,5 @@
 const db = require('../db/connection.js');
+const comments = require('../db/data/test-data/comments.js');
 
 const fetchCommentsByArticleId = (id) => {
      return db.query(`SELECT * FROM articles 
@@ -9,7 +10,8 @@ const fetchCommentsByArticleId = (id) => {
         }
         return db.query(`SELECT comment_id, votes, created_at, author, body, article_id
         FROM comments 
-        WHERE article_id = $1`,[id])
+        WHERE article_id = $1 ORDER BY comments.created_at DESC`,[id])
+        
      })
      .then(({rows}) =>{
         return rows;
