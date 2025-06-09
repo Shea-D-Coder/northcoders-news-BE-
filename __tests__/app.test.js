@@ -157,6 +157,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 })
 describe("GET /api/articles/:article_id/comments", () => {
+
    test("200: Responds with an object with the key of comments and an array of comments for a specific article_id", () => {
     return request(app)
       .get("/api/articles/1/comments")
@@ -191,6 +192,14 @@ describe("GET /api/articles/:article_id/comments", () => {
           return new Date(earlierComment) - new Date(latestComment );
         })
         expect(commentDates).toEqual(sortedCommentsByDates); 
+      });
+  });
+   test(" GET - 400: Responds with an error if article_id is not valid", () => {
+    return request(app)
+      .get("/api/articles/one/comments")
+      .expect(400)
+      .then(({ body}) => {
+        expect(body.msg).toBe("Bad Request");
       });
   });
 })

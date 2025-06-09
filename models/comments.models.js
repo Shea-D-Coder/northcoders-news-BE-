@@ -12,7 +12,7 @@ const fetchCommentsByArticleId = (id) => {
         FROM comments 
         WHERE article_id = $1 ORDER BY comments.created_at DESC`,[id])
         
-     })
+   })
      .then(({rows}) =>{
         return rows;
      }); 
