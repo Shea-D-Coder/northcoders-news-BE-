@@ -26,7 +26,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     }).then(() => {
       return db.query(`CREATE TABLE comments(
                        comment_id SERIAL PRIMARY KEY, article_id INT REFERENCES articles(article_id), 
-                       body TEXT, votes INT DEFAULT 0, author VARCHAR(50) REFERENCES users(username), 
+                       body TEXT NOT NULL, votes INT DEFAULT 0, author VARCHAR(50) REFERENCES users(username), 
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`
                       )
     }).then(() => {
