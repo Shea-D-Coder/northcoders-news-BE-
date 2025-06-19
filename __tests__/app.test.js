@@ -253,18 +253,18 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
   });
-//   test(" POST - 404: Responds with an error when given a valid field but the reference value does not exist", () => {
-//     return request(app)
-//     .post("/api/articles/1/comments")
-//     .send({
-//       username: "Munchy200",
-//       body: "Being consistent is a challenge"
-//     })
-//     .expect(404)
-//     .then(({ body}) => {
-//       expect(body.msg).toBe("Not Found");
-//     });
-//   });
+  test(" POST - 404: Responds with an error when given a valid field but the reference value does not exist", () => {
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send({
+      username: "Munchy200",
+      body: "Being consistent is a challenge"
+    })
+    .expect(404)
+    .then(({ body}) => {
+      expect(body.msg).toBe("Not Found");
+    });
+  });
 })
 
 
