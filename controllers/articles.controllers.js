@@ -1,6 +1,7 @@
 const {
   fetchAllArticles, 
-  fetchArticlesById
+  fetchArticlesById,
+  updateArticleVotesById
 } = require("../models/articles.models.js");
 
 const getAllArticles = (request, response) =>{
@@ -11,7 +12,9 @@ const getAllArticles = (request, response) =>{
 
 const getArticlesById = (request, response, next) =>{
   const {article_id} = request.params;
-  fetchArticlesById(article_id).then((article)=> {
+  
+  fetchArticlesById(article_id)
+  .then((article)=> {
     response.status(200).send({article: article});
     })
     .catch((err) => {
@@ -19,8 +22,20 @@ const getArticlesById = (request, response, next) =>{
     });
 };
 
+const patchArticleById= (request, response, next) =>{
+  const {article_id} = request.params;
+  const {inc_votes} = request.body
+
+  updateArticleVotesById(article_id, inc_votes)
+  .then((updateArticle)=> {
+    response.status(200).send({article: updateArticle});
+    })
+    .catch((err) => {
+      next(err)
+    });}
 
 
 module.exports = { getAllArticles, 
-                   getArticlesById
+                   getArticlesById,
+                   patchArticleById
                  }

@@ -20,7 +20,8 @@ const fetchAllArticles = () => {
 }
 
 const fetchArticlesById = (id) => {
-     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id] )
+     return db.query(`SELECT * FROM articles 
+                      WHERE article_id = $1`, [id] )
      .then(({rows}) => { 
         if(!rows.length){
             return Promise.reject({ status: 404, msg: "Not Found"})
@@ -30,4 +31,23 @@ const fetchArticlesById = (id) => {
     })
 }
 
-module.exports = { fetchAllArticles, fetchArticlesById }
+const updateArticleVotesById = (article_id, inc_votes = 0)=>{
+    if(typeof inc_votes !== "number"){
+       return Promise.reject({ status: 400, msg: "Bad Request"}) 
+    }
+    return db.query(`UPDATE articles
+                     SET votes = votes + $1
+                     WHERE article_id = $2 
+                     RETURNING *;`,[inc_votes, article_id ])
+        .then(({rows}) => { 
+        if(!rows.length){
+            return Promise.reject({ status: 404, msg: "Not Found"})
+        }
+        const article = rows[0]; 
+        return article;
+    })
+    }
+
+module.exports = { fetchAllArticles, 
+                   fetchArticlesById, 
+                   updateArticleVotesById }

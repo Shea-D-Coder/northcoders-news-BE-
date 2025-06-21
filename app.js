@@ -3,7 +3,8 @@ const app = express()
 const { getApi } = require('./controllers/api.endpoints.controllers.js')
 const { getAllTopics } = require('./controllers/topics.controllers.js');
 const { getAllArticles, 
-        getArticlesById
+        getArticlesById,
+        patchArticleById
       } = require('./controllers/articles.controllers.js');
 
 const { getAllUsers } = require('./controllers/users.controllers.js');
@@ -32,7 +33,7 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId)
 
 app.post("/api/articles/:article_id/comments", postCommentsByArticleId)  
       
-
+app.patch("/api/articles/:article_id", patchArticleById)
 
 app.use(handlePostgresErrors);
 

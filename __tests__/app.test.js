@@ -48,19 +48,19 @@ describe("GET /api", () => {
       .expect(200)
       .then(({ body }) => {
         const [{ 
-          author,
-          title,
           article_id,
+          title,
           topic,
+          author,
           created_at,
           votes,
           article_img_url,
           comment_count
         }] = body.articles;
-        expect(typeof author).toBe('string');
-        expect(typeof title).toBe('string');
-        expect(typeof article_id).toBe('number');
+        expect(typeof article_id).toBe('number'); 
+        expect(typeof title).toBe('string'); 
         expect(typeof topic).toBe('string');
+        expect(typeof author).toBe('string');
         expect(typeof created_at).toBe('string');
         expect(typeof votes).toBe('number');
         expect(typeof article_img_url).toBe('string');
@@ -118,21 +118,21 @@ describe("GET /api/articles/:article_id", () => {
       .expect(200)
       .then(({ body : bodyResponse }) => {
         const { 
-          author,
-          title,
           article_id,
-          body,
+          title,
           topic,
+          author,
+          body,
           created_at,
           votes,
           article_img_url
         } = bodyResponse.article
         expect(article_id).toBe(5);
-         expect(typeof author).toBe('string');
-        expect(typeof title).toBe('string');
-        expect(typeof article_id).toBe('number');
-        expect(typeof body).toBe('string')
+        expect(typeof article_id).toBe('number'); 
+        expect(typeof title).toBe('string'); 
         expect(typeof topic).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string');
         expect(typeof created_at).toBe('string');
         expect(typeof votes).toBe('number');
         expect(typeof article_img_url).toBe('string');
@@ -172,21 +172,24 @@ describe("GET /api/articles/:article_id/comments", () => {
       .then(({ body : bodyResponse }) => {
         const [{ 
           comment_id,
-          votes,
-          created_at,
-          author,
+          article_id,
           body,
-          article_id
+          votes,
+          author,
+          created_at,
         }] = bodyResponse.comments
         expect(typeof comment_id).toBe('number');
-        expect(typeof votes).toBe('number');
-        expect(typeof created_at).toBe('string');
-        expect(typeof author).toBe('string');
-        expect(typeof body).toBe('string')
         expect(article_id).toBe(1);
+        expect(typeof body).toBe('string'); 
+        expect(typeof votes).toBe('number');
+        expect(typeof author).toBe('string');
+        expect(typeof created_at).toBe('string');
+        
+        
+        
     });
   })
-   test("200: Responds with an object with the comments sorted by date in desending order", () => {
+   test("200: Responds with an object with the comments sorted by date in descending order", () => {
     return request(app)
       .get("/api/articles/1/comments")
       .expect(200)
@@ -230,18 +233,18 @@ describe("GET /api/articles/:article_id/comments", () => {
       .then(({ body : bodyResponse }) => {
         const { 
           comment_id,
-          votes,
-          created_at,
-          author,
+          article_id,
           body,
-          article_id
+          votes,
+          author,
+          created_at  
         } = bodyResponse.comment
          expect(typeof comment_id).toBe('number');
-        expect(typeof votes).toBe('number');
-        expect(typeof created_at).toBe('string');
-        expect(typeof author).toBe('string');
-        expect(typeof body).toBe('string')
-        expect(article_id).toBe(1);
+         expect(article_id).toBe(1);
+         expect(typeof body).toBe('string');
+         expect(typeof votes).toBe('number');
+         expect(typeof author).toBe('string');
+         expect(typeof created_at).toBe('string');  
       });
   });
     test(" POST - 400: Responds with an error when the request body is missing required fields username and body", () => {
@@ -266,6 +269,110 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
   });
 })
-
+  describe("PATCH /api/articles/:article_id", () => {
+     test("PATCH - 200: Responds with the article unchanged when sent a request with no information in the request body", () => {
+    return request(app)
+      .patch("/api/articles/4")
+      .send({})
+      .expect(200)
+      .then(({body: bodyResponse})=> {
+      const { 
+         article_id,
+         title,
+         topic,
+         author,
+         body,
+         created_at, 
+         votes, 
+         article_img_url
+        } = bodyResponse.article
+        expect(article_id).toBe(4);
+        expect(typeof article_id).toBe('number');
+        expect(typeof title).toBe('string');
+        expect(typeof topic).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string');
+        expect(typeof created_at).toBe('string');
+        expect(typeof votes).toBe('number');
+        expect(typeof article_img_url).toBe('string');
+      })
+    })
+   test("PATCH - 200: Responds with the updated article when sent a valid inc_votes object by article_id", () => {
+    return request(app)
+      .patch("/api/articles/4")
+      .send({
+        inc_votes: 70
+        })
+      .expect(200)
+      .then(({ body: bodyResponse }) => {
+        const { 
+         article_id,
+         title,
+         topic,
+         author,
+         body,
+         created_at, 
+         votes, 
+         article_img_url
+        } = bodyResponse.article
+        expect(article_id).toBe(4);
+        expect(typeof article_id).toBe('number');
+        expect(typeof title).toBe('string');
+        expect(typeof topic).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string');
+        expect(typeof created_at).toBe('string');
+        expect(typeof votes).toBe('number');
+        expect(typeof article_img_url).toBe('string');
+      });
+  });
+  test("PATCH - 200: Responds with the updated article when sent a valid inc_votes object by article_id to decrease the votes with a negative number", () => {
+    return request(app)
+      .patch("/api/articles/4")
+      .send({
+        inc_votes: -5
+        })
+      .expect(200)
+      .then(({body: bodyResponse})=> {
+      const { 
+         article_id,
+         title,
+         topic,
+         author,
+         body,
+         created_at, 
+         votes, 
+         article_img_url
+        } = bodyResponse.article
+        expect(article_id).toBe(4);
+        expect(typeof article_id).toBe('number');
+        expect(typeof title).toBe('string');
+        expect(typeof topic).toBe('string');
+        expect(typeof author).toBe('string');
+        expect(typeof body).toBe('string');
+        expect(typeof created_at).toBe('string');
+        expect(typeof votes).toBe('number');
+        expect(typeof article_img_url).toBe('string');
+      })
+    }) 
+      test(" PATCH - 400: Responds with an error when the request body contains an invalid value", () => {
+    return request(app)
+      .patch("/api/articles/4")
+      .send({inc_votes: "twenty"})
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+    });
+       test(" PATCH - 400: Responds with an error with a valid article_id that does not exist", () => {
+    return request(app)
+      .patch("/api/articles/99999999")
+      .send({inc_votes: 120})
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+    });
+  })
 
   
