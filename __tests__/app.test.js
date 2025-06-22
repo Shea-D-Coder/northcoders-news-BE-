@@ -183,10 +183,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(typeof body).toBe('string'); 
         expect(typeof votes).toBe('number');
         expect(typeof author).toBe('string');
-        expect(typeof created_at).toBe('string');
-        
-        
-        
+        expect(typeof created_at).toBe('string'); 
     });
   })
    test("200: Responds with an object with the comments sorted by date in descending order", () => {
@@ -364,10 +361,37 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
     });
-       test(" PATCH - 400: Responds with an error with a valid article_id that does not exist", () => {
+       test(" PATCH - 404: Responds with an error with a valid article_id that does not exist", () => {
     return request(app)
       .patch("/api/articles/99999999")
       .send({inc_votes: 120})
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
+      });
+    });
+  })
+
+  describe("DELETE /api/comments/:comment_id", () => {
+     test("DELETE - 204: Responds with the deleted comment by id and an empty body", () => {
+    return request(app)
+      .delete("/api/comments/6")
+      .expect(204)
+      .then(({body})=> {
+        expect(body).toEqual({});
+      })
+    })
+      test(" DELETE - 400: Responds with an error when the request contains an invalid comment_id", () => {
+    return request(app)
+      .delete("/api/comments/four")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+    });
+       test(" DELETE - 404: Responds with an error when the request contains a valid comment_id that does not exist", () => {
+    return request(app)
+      .delete("/api/comments/99999999")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Not Found");

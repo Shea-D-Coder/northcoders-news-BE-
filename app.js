@@ -10,7 +10,8 @@ const { getAllArticles,
 const { getAllUsers } = require('./controllers/users.controllers.js');
 
 const { getCommentsByArticleId, 
-        postCommentsByArticleId
+        postCommentsByArticleId,
+        deleteCommentById
       } = require("./controllers/comments.controllers.js");
 
 const {handlePostgresErrors,
@@ -35,10 +36,15 @@ app.post("/api/articles/:article_id/comments", postCommentsByArticleId)
       
 app.patch("/api/articles/:article_id", patchArticleById)
 
+app.delete("/api/comments/:comment_id", deleteCommentById)
+
 app.use(handlePostgresErrors);
 
 app.use(handleCustomErrors);
 
-
+// app.use((err, req, res, next) => {
+//   console.log(err);
+//   res.status(500).send({ msg: "Server Error!"});
+// });
 
 module.exports = app
