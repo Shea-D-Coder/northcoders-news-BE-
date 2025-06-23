@@ -1,6 +1,7 @@
 const db = require('../db/connection.js');
+const { checkExists } = require('./utils.js');
 
-const fetchAllArticles = (sort_by, order) => {
+const fetchAllArticles = (topic, sort_by, order) => {
     if(!sort_by){
         sort_by = "created_at"
     }
@@ -24,6 +25,37 @@ const fetchAllArticles = (sort_by, order) => {
     ){
         return Promise.reject({ status: 400, msg: "Bad Request"})
     }
+    if(topic) {
+         return db.query(`SELECT 
+      articles.author,
+      articles.title,
+      articles.article_id,
+      articles.topic,
+      articles.created_at,
+      articles.votes,
+      articles.article_img_url, 
+        
+      COUNT(comments.comment_id)::INT AS comment_count 
+      FROM articles 
+      LEFT JOIN comments ON comments.article_id = articles.article_id
+      WHERE articles.topic = $1
+      GROUP BY articles.article_id
+      ORDER BY ${sort_by} ${order}`,
+      [topic])
+      .then(({rows}) => {
+        if(rows.length === 0){
+            return checkExists("topics", "slug", topic)
+            
+            .then ((exists)=> {
+                if(!exists){
+                  return Promise.reject({ status: 404, msg: "Not Found"})   
+                }
+                return []
+            })
+        }
+        return rows;
+    })
+}else {
     
      return db.query(`SELECT 
       articles.author,
@@ -42,6 +74,7 @@ const fetchAllArticles = (sort_by, order) => {
       .then(({rows}) => {
         return rows;
     })
+}
 }
 
 const fetchArticlesById = (id) => {

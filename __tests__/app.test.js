@@ -352,7 +352,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(typeof article_img_url).toBe('string');
       })
     }) 
-      test(" PATCH - 400: Responds with an error when the request body contains an invalid value", () => {
+    test(" PATCH - 400: Responds with an error when the request body contains an invalid value", () => {
     return request(app)
       .patch("/api/articles/4")
       .send({inc_votes: "twenty"})
@@ -361,7 +361,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad Request");
       });
     });
-       test(" PATCH - 404: Responds with an error with a valid article_id that does not exist", () => {
+    test(" PATCH - 404: Responds with an error with a valid article_id that does not exist", () => {
     return request(app)
       .patch("/api/articles/99999999")
       .send({inc_votes: 120})
@@ -441,7 +441,7 @@ describe("GET /api/articles", () => {
         expect(titles).toEqual(sortedArticlesByTitles); 
       });
   });
-    test("200: Responds with an object with the articles sorted by author in ascending order", () => {
+  test("200: Responds with an object with the articles sorted by author in ascending order", () => {
     return request(app)
       .get("/api/articles?sort_by=author&order=asc")
       .expect(200)
@@ -458,7 +458,7 @@ describe("GET /api/articles", () => {
           return authorA.localeCompare(authorB);
         })
         expect(authors).toEqual(sortedArticlesByAuthors); 
-      });
+    });
   });
   test("200: Responds with an object with the articles sorted by author in descending order", () => {
     return request(app)
@@ -515,7 +515,7 @@ describe("GET /api/articles", () => {
         expect(createdDates).toEqual(sortedArticlesByDates); 
       });
   })
-   test("200: Responds with an object with the articles sorted by votes in ascending order", () => {
+  test("200: Responds with an object with the articles sorted by votes in ascending order", () => {
     return request(app)
       .get("/api/articles?sort_by=votes&order=asc")
       .expect(200)
@@ -530,7 +530,7 @@ describe("GET /api/articles", () => {
           return voteA - voteB;
         })
         expect(votes).toEqual(sortedArticlesByVotes); 
-      });
+    });
   })
   test("200: Responds with an object with the articles sorted by votes in descending order", () => {
     return request(app)
@@ -549,20 +549,54 @@ describe("GET /api/articles", () => {
         expect(votes).toEqual(sortedArticlesByVotes); 
       });
     })
-        test(" GET - 400: Responds with an error when passed an invalid sort_by query", () => {
+  test(" GET - 400: Responds with an error when passed an invalid sort_by query", () => {
     return request(app)
       .get("/api/articles?sort_by=cat")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad Request");
-      });
     });
-        test(" GET - 400: Responds with an error when passed an invalid order query", () => {
+  });
+  test(" GET - 400: Responds with an error when passed an invalid order query", () => {
     return request(app)
       .get("/api/articles?order=length")
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad Request");
+    });
+  });
+})
+describe("GET /api/articles", () => {
+  test("200: Responds with an array with the articles filtered by topic ", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+        })
+    })
+  })
+  test("200: Responds with an empty array with valid topic the contains no articles ", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body }) => {
+        const articles = body.articles;
+        expect(typeof articles).toBe('object');
+        expect(articles).toEqual([]);
+      })
+  })
+    test(" GET - 404: Responds with an error with a topic that does not exist", () => {
+    return request(app)
+      .get("/api/articles?topic=mango")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Not Found");
       });
     });
 })

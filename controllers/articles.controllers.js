@@ -5,9 +5,12 @@ const {
 } = require("../models/articles.models.js");
 
 const getAllArticles = (request, response, next) =>{
-  const {sort_by, order} = request.query
+  const topic = request.query.topic
+  const sort_by= request.query.sort_by
+  const order = request.query.order
 
-    fetchAllArticles(sort_by, order).then((articles)=> {
+    fetchAllArticles(topic, sort_by, order)
+    .then((articles)=> {
         response.status(200).send({articles});
     })
     .catch((err) => {

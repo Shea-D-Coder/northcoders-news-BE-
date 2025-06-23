@@ -1,7 +1,17 @@
 const { convertTimestampToDate} = require("../db/seeds/utils");
 const { createLookupObject } = require("../db/seeds/utils");
+const { checkExists } = require ("../models/utils")
+const db = require('../db/connection.js');
+const seed = require('../db/seeds/seed');
+const data = require('../db/data/test-data/index.js');
 
+beforeEach(() => { 
+   return seed(data)
+})
 
+afterAll(() => {
+return db.end()
+})
 
 describe("convertTimestampToDate", () => {
   test("returns a new object", () => {
@@ -38,6 +48,8 @@ describe("convertTimestampToDate", () => {
     expect(result).toEqual(expected);
   });
 });
+
+
 describe("createLookupObject", () => {
   test(" returns an empty object when passed an empty array", () => {
     const key = 'title'
@@ -89,4 +101,68 @@ describe("createLookupObject", () => {
     expect(input).toEqual(inputCopy) 
   })
 })
+
+describe("checkExists", () => {
+  test(" returns true when the topic exists on the topic table", () => {
+    const table = 'topics'
+    const column = 'slug'
+    const value = 'mitch'
+
+    return checkExists(table, column, value)
+    .then ((actual) => {
+      const expected = true
+      expect(typeof actual).toBe("boolean")
+      expect(actual).toBe(expected)
+    })
+  })
+   test(" returns false when the topic does not exists on the topic table", () => {
+    const table = 'topics'
+    const column = 'slug'
+    const value = 'mango'
+
+    return checkExists(table, column, value)
+    .then ((actual) => {
+      const expected = false
+      expect(typeof actual).toBe("boolean")
+      expect(actual).toBe(expected)
+    })
+  })
+   test(" returns true when the username exists on the user table", () => {
+    const table = 'users'
+    const column = 'username'
+    const value = 'butter_bridge'
+
+    return checkExists(table, column, value)
+    .then ((actual) => {
+      const expected = true
+      expect(typeof actual).toBe("boolean")
+      expect(actual).toBe(expected)
+    })
+  })
+   test(" returns false when the username does not exists on the user table", () => {
+    const table = 'users'
+    const column = 'username'
+    const value = 'shea_d_coder'
+
+    return checkExists(table, column, value)
+    .then ((actual) => {
+      const expected = false
+      expect(typeof actual).toBe("boolean")
+      expect(actual).toBe(expected)
+    })
+  })
+  test(" returns true when the article exists on the articles table", () => {
+    const table = 'articles'
+    const column = 'article_id'
+    const value = 1
+
+    return checkExists(table, column, value)
+    .then ((actual) => {
+      const expected = true
+      expect(typeof actual).toBe("boolean")
+      expect(actual).toBe(expected)
+    })
+  })
+})
+
 
