@@ -1,3 +1,4 @@
+const cors = require('cors')
 const express = require('express')
 const app = express()
 const { getApi } = require('./controllers/api.endpoints.controllers.js')
@@ -17,7 +18,9 @@ const { getCommentsByArticleId,
 const {handlePostgresErrors,
        handleCustomErrors
       } = require('./errors.js');
-
+      
+app.use(cors())
+      
 app.use(express.json())
 
 app.get("/api", getApi)
