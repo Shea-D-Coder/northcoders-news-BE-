@@ -4,9 +4,14 @@ const {
   updateArticleVotesById
 } = require("../models/articles.models.js");
 
-const getAllArticles = (request, response) =>{
-    fetchAllArticles().then((articles)=> {
+const getAllArticles = (request, response, next) =>{
+  const {sort_by, order} = request.query
+
+    fetchAllArticles(sort_by, order).then((articles)=> {
         response.status(200).send({articles});
+    })
+    .catch((err) => {
+      next(err)
     });
 };
 

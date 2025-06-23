@@ -42,9 +42,9 @@ app.use(handlePostgresErrors);
 
 app.use(handleCustomErrors);
 
-// app.use((err, req, res, next) => {
-//   console.log(err);
-//   res.status(500).send({ msg: "Server Error!"});
-// });
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).send({ msg: "Server Error!"});
+});
 
 module.exports = app

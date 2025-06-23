@@ -1,6 +1,30 @@
 const db = require('../db/connection.js');
 
-const fetchAllArticles = () => {
+const fetchAllArticles = (sort_by, order) => {
+    if(!sort_by){
+        sort_by = "created_at"
+    }
+    if(!order){
+        order = "desc"
+    }
+
+    const validSortByColumn = [
+        "author",
+        "title",
+        "article_id",
+        "topic",
+        "created_at",
+        "votes",
+        "article_img_url", 
+    ]
+    const validOrder = ["asc", "desc"]
+
+    if(!validSortByColumn.includes(sort_by) || 
+    !validOrder.includes(order)
+    ){
+        return Promise.reject({ status: 400, msg: "Bad Request"})
+    }
+    
      return db.query(`SELECT 
       articles.author,
       articles.title,
@@ -14,7 +38,8 @@ const fetchAllArticles = () => {
       FROM articles 
       LEFT JOIN comments ON comments.article_id = articles.article_id
       GROUP BY articles.article_id
-      ORDER BY articles.created_at DESC`).then(({rows}) => {
+      ORDER BY ${sort_by} ${order}`)
+      .then(({rows}) => {
         return rows;
     })
 }

@@ -398,5 +398,171 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
     });
   })
+describe("GET /api/articles", () => {
+     test("200: Responds with an object with the articles sorted by title in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
 
-  
+        articles.forEach((article) =>{
+          expect(typeof article.title).toBe('string');
+        })
+
+        const titles = articles.map(article => article.title);
+
+        const sortedArticlesByTitles =[ ...titles].sort((titleA, titleB) => {  
+          return titleA.localeCompare(titleB);
+        })
+        expect(titles).toEqual(sortedArticlesByTitles); 
+      });
+  });
+   test("200: Responds with an object with the articles sorted by title in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        articles.forEach((article) =>{
+          expect(typeof article.title).toBe('string');
+        })
+
+        const titles = articles.map(article => article.title);
+
+        const sortedArticlesByTitles =[ ...titles].sort((titleA, titleB) => {  
+          return titleB.localeCompare(titleA);
+        })
+        expect(titles).toEqual(sortedArticlesByTitles); 
+      });
+  });
+    test("200: Responds with an object with the articles sorted by author in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        articles.forEach((article) =>{
+          expect(typeof article.author).toBe('string');
+        })
+        const authors = articles.map(article => article.author);
+        const sortedArticlesByAuthors =[ ...authors].sort((authorA, authorB) => {  
+          return authorA.localeCompare(authorB);
+        })
+        expect(authors).toEqual(sortedArticlesByAuthors); 
+      });
+  });
+  test("200: Responds with an object with the articles sorted by author in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=author")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        articles.forEach((article) =>{
+          expect(typeof article.author).toBe('string');
+        })
+
+        const authors = articles.map(article => article.author);
+
+        const sortedArticlesByAuthors =[ ...authors].sort((authorA, authorB) => {  
+          return authorB.localeCompare(authorA);
+        })
+        expect(authors).toEqual(sortedArticlesByAuthors); 
+      });
+  });
+  test("200: Responds with an object with the articles sorted by created_at dates in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        const createdDates = articles.map(article => article.created_at);
+
+        const sortedArticlesByDates =[ ...createdDates].sort((latestDate, earlierDate) => {  
+          return new Date(latestDate) - new Date(earlierDate );
+        })
+        expect(createdDates).toEqual(sortedArticlesByDates); 
+      });
+  })
+  test("200: Responds with an object with the articles sorted by created_at dates in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        const createdDates = articles.map(article => article.created_at);
+
+        const sortedArticlesByDates =[ ...createdDates].sort((latestDate, earlierDate) => {  
+          return new Date(earlierDate) - new Date(latestDate );
+        })
+        expect(createdDates).toEqual(sortedArticlesByDates); 
+      });
+  })
+   test("200: Responds with an object with the articles sorted by votes in ascending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes&order=asc")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        const votes = articles.map(article => article.votes);
+
+        const sortedArticlesByVotes =[ ...votes].sort((voteA, voteB) => {  
+          return voteA - voteB;
+        })
+        expect(votes).toEqual(sortedArticlesByVotes); 
+      });
+  })
+  test("200: Responds with an object with the articles sorted by votes in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .then(({ body }) => {
+        const {articles} = body;
+        expect(typeof articles).toBe('object');
+        expect(typeof articles.length).toBe('number');
+
+        const votes = articles.map(article => article.votes);
+
+        const sortedArticlesByVotes =[ ...votes].sort((voteA, voteB) => {  
+          return voteB - voteA;
+        })
+        expect(votes).toEqual(sortedArticlesByVotes); 
+      });
+    })
+        test(" GET - 400: Responds with an error when passed an invalid sort_by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=cat")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+    });
+        test(" GET - 400: Responds with an error when passed an invalid order query", () => {
+    return request(app)
+      .get("/api/articles?order=length")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad Request");
+      });
+    });
+})
