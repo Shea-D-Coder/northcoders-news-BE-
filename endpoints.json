@@ -10,16 +10,44 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles",
+    "description": "serves an array of all articles. Accepts queries to sort by a valid column (defaults to the created_at date), order in ascending or descending (defaults to descending) and filter by topic. ",
+     "exampleRequest": {
+     "endpoint": "/api/articles?topic=herbs&sort_by=votes&order=asc"
+     },
     "exampleResponse": {
       "articles": [
         {
+          "article_id": 4,
+          "title": "Advances in technology",
+          "topic": "technology",
+          "author": "Thingymagigibob",
+          "body": "This article delves into the latest technological advancements",
+          "created_at": "2020-05-14T10:20:00.000Z",
+          "votes": 189,
+          "article_img_url": "",
+          "comment_count": 7
+        },
+        {
+          "article_id": 2,
+          "title": "Herbs in the wild",
+          "topic": "herbs",
+          "author": "plantbabe",
+          "body": "This article delves into the latest discoveries of herbs",
+          "created_at": "2020-05-10T09:00:00.000Z",
+          "votes": 55,
+          "article_img_url": "",
+          "comment_count": 11
+        },
+          {
+          "article_id": 6,
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
           "author": "weegembump",
+          "body": "This article delves into the latest development in plant fertilizer",
           "created_at": "2018-05-30T15:59:13.341Z",
-          "votes": 0,
-          "comment_count": 6
+          "votes": 35,
+          "article_img_url": "",
+          "comment_count": 2
         }
       ]
     }
@@ -61,8 +89,58 @@
         }
       ]
     }
-  }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a new comment to a specific article",
+    "exampleRequestBody": {
+      "username": "poopy",
+      "body": "I love rare plants from Central America"
+    },
+      "exampleResponse":{
+        "comments": 
+        {
+        "comment_id":5,
+        "body": "I love rare plants from Central America",
+        "article_id": 6,
+        "author": "Mcone_lee",
+        "votes": 30,
+        "created_at": "2016-30-30T25:32:13.333Z"
+       }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Updates the vote count of an article",
+     "exampleRequestBody": {
+        "inc_votes": 250
+      },   
+    "exampleResponse": {
+      "article":
+      {
+          "author": "Danny_Dane",
+          "title": "Green food",
+          "article_id": 2,
+          "body": "Tree day of life" , 
+          "topic": "Olive",
+          "created_at": "2016-30-30T25:32:13.333Z",
+          "votes": 250,
+          "article_img_url": ""
+      }
+    }
+ },
+ "DELETE /api/comments/:comment_id": {
+    "description": "Deletes the comment of a given comment_id",
+     "exampleRequestBody": {
+        "endpoint": "/api/comments/100000"
+      },   
+    "exampleResponse": {
+      "status": 204,
+      "body": null  
+    }
+ } 
 }
+
+  
+
  
 
 

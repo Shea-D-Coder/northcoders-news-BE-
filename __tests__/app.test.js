@@ -399,7 +399,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     });
   })
 describe("GET /api/articles", () => {
-     test("200: Responds with an object with the articles sorted by title in ascending order", () => {
+     test("200: Responds with an object with the articles sorted by title in ascending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=title&order=asc")
       .expect(200)
@@ -420,7 +420,7 @@ describe("GET /api/articles", () => {
         expect(titles).toEqual(sortedArticlesByTitles); 
       });
   });
-   test("200: Responds with an object with the articles sorted by title in descending order", () => {
+   test("200: Responds with an object with the articles sorted by title in descending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=title")
       .expect(200)
@@ -441,7 +441,7 @@ describe("GET /api/articles", () => {
         expect(titles).toEqual(sortedArticlesByTitles); 
       });
   });
-  test("200: Responds with an object with the articles sorted by author in ascending order", () => {
+  test("200: Responds with an object with the articles sorted by author in ascending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=author&order=asc")
       .expect(200)
@@ -460,7 +460,7 @@ describe("GET /api/articles", () => {
         expect(authors).toEqual(sortedArticlesByAuthors); 
     });
   });
-  test("200: Responds with an object with the articles sorted by author in descending order", () => {
+  test("200: Responds with an object with the articles sorted by author in descending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=author")
       .expect(200)
@@ -481,7 +481,7 @@ describe("GET /api/articles", () => {
         expect(authors).toEqual(sortedArticlesByAuthors); 
       });
   });
-  test("200: Responds with an object with the articles sorted by created_at dates in ascending order", () => {
+  test("200: Responds with an object with the articles sorted by created_at dates in ascending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=created_at&order=asc")
       .expect(200)
@@ -498,7 +498,7 @@ describe("GET /api/articles", () => {
         expect(createdDates).toEqual(sortedArticlesByDates); 
       });
   })
-  test("200: Responds with an object with the articles sorted by created_at dates in descending order", () => {
+  test("200: Responds with an object with the articles sorted by created_at dates in descending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=created_at")
       .expect(200)
@@ -515,7 +515,7 @@ describe("GET /api/articles", () => {
         expect(createdDates).toEqual(sortedArticlesByDates); 
       });
   })
-  test("200: Responds with an object with the articles sorted by votes in ascending order", () => {
+  test("200: Responds with an object with the articles sorted by votes in ascending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=votes&order=asc")
       .expect(200)
@@ -532,7 +532,7 @@ describe("GET /api/articles", () => {
         expect(votes).toEqual(sortedArticlesByVotes); 
     });
   })
-  test("200: Responds with an object with the articles sorted by votes in descending order", () => {
+  test("200: Responds with an object with the articles sorted by votes in descending order when passed an sorting query", () => {
     return request(app)
       .get("/api/articles?sort_by=votes")
       .expect(200)
